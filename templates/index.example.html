@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>CPAP Temp & Humidity Recorder</title>
+</head>
+<body>
+	<div class="container">
+		<canvas id="myChart" width="400" height="400"></canvas>
+		{% for info in data %}
+			<h4>{{ info.temp }}</h4>
+			<h4>{{ info.hum }}</h4>
+			<h4>{{ info.date }}</h4>
+		{% endfor %}
+	</div>
+
+	<form action="/reset" method="POST">
+		<button type="submit" class="reset-btn">Reset</button>
+	</form>
+
+	<script src="../static/js/jquery.min.js"></script>
+	<script src="../static/js/chart.min.js"></script>
+	<script src="../static/js/index.js"></script>
+	<script>
+		var ctx = document.getElementById('myChart').getContext('2d');
+		let datetimes = '|2021-05-21 04:04:41.632091|2021-05-21 04:10:41.632091|2021-05-21 04:24:41.632091|2021-05-21 04:04:41.632091'.split('|').filter(date => date.length > 2);
+
+		datetimes = datetimes.map(date => date.split(' ')[1].split('.')[0])
+		console.log(datetimes);
+
+		var myChart = new Chart(ctx, {
+			type: 'line',
+			data: {
+				labels: datetimes,
+				datasets: [{
+					label: '# of Votes',
+					data: [12, 19, 3, 5, 2, 3],
+					backgroundColor: [
+						'rgba(54, 162, 235, 0.2)',
+					],
+					borderColor: [
+						'rgba(54, 162, 235, 1)',
+					],
+					borderWidth: 2
+				}]
+			},
+			options: {
+				scales: {
+					y: {
+						beginAtZero: true
+					}
+				}
+			}
+		});
+	</script>
+</body>
+</html>
